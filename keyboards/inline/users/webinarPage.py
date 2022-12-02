@@ -1,3 +1,5 @@
+import re
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from keyboards.inline.users import profile_cb
@@ -17,6 +19,22 @@ class WebinarPage:
         return text
 
     @staticmethod
+    async def back_mainMenu() -> InlineKeyboardMarkup:
+        """Стартовая клавиатура главного меню
+
+                            :param:
+                            :return: возвращает клавиатуру
+                        """
+        return InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(text=f"⬅️ Назад",
+                                         callback_data=profile_cb.new("MainPage", 0, 0))
+                ]
+            ]
+        )
+
+    @staticmethod
     async def WebinarPageIKB() -> InlineKeyboardMarkup:
         """Стартовая клавиатура главного меню
 
@@ -27,7 +45,7 @@ class WebinarPage:
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text=f"✅ Зарегистрироваться",
-                                         callback_data=profile_cb.new("Registration", 0, 0))
+                                         callback_data=profile_cb.new("RegistrationUser", 0, 0))
                 ],
                 [
                     InlineKeyboardButton(text=f"⬅️ Назад",
@@ -35,3 +53,31 @@ class WebinarPage:
                 ]
             ]
         )
+
+    @staticmethod
+    async def registration_user_text() -> str:
+        text: str = "Записаться на вебинар\n" \
+               "👉 Для записи на вебинар оставьте ваши контактные данные (2 простых шага - Имя и Email)\n\n" \
+               "1⃣ Ваше имя (шаг 1 из 2):"
+
+        return text
+
+    @staticmethod
+    async def email_text() -> str:
+        text: str = "2⃣ Ваш email (шаг 2 из 2):"
+        return text
+
+    @staticmethod
+    async def validate_email(get_email: str) -> str:
+        email = get_email
+
+        pattern = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+
+        if re.match(pattern, email) is not None:
+            print("Проверка пройдена")
+            return email
+        else:
+            email = None
+            return email
+
+
